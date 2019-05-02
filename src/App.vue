@@ -25,12 +25,20 @@
         }
     },
     methods: {
-      deleteTodo(id) {
-        this.todos = this.todos.filter(todo => todo.id !== id);
-      },
+        deleteTodo(id) {
+          axios.delete(`https://jsonplaceholder.typicode.com/todos/{id}`)
+            .then(res => this.todos = this.todos.filter(todo => todo.id !== id))
+            .catch(err => console.log(err));
+        },
 
       addTodo(newTodo) {
-          this.todos = [ ...this.todos, newTodo ];
+          const { title, completed } = newTodo;
+
+          axios.post('https://jsonplaceholder.typicode.com/todos', {
+              title,
+              completed
+          }).then(res => this.todos = [ ...this.todos, res.data ])
+            .catch(err => console.log(err));
       }
     },
     created() {
